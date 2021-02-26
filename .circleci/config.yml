@@ -62,6 +62,8 @@ jobs:
           paths:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
+      # Wait for DB
+      - run: dockerize -wait tcp://localhost:5432 -timeout 1
       - run: yarn install
       - run:
           name: Setup DB
