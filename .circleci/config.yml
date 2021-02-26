@@ -66,8 +66,8 @@ jobs:
       - run:
           name: Setup DB
           command: |
-            bundle exec rake db:create --trace
-            bundle exec rake db:migrate --trace
+            bundle exec rake db:create db:schema:load --trace
+            bundle exec rake db:migrate
 
       # run tests!
       - run:
