@@ -1,0 +1,17 @@
+<header class="masthead mb-auto">
+  <div class="inner">
+    <h3 class="masthead-brand">PlaceSharing</h3>
+    <nav class="nav nav-masthead justify-content-center">
+      <a class="nav-link text-white" href="/">Home</a>
+      <a class="nav-link text-white" href="/places">Places</a>
+      <a class="nav-link text-white" href="/users_list">Users List</a>
+      <% if user_signed_in? %>
+        <%= link_to "Signout", destroy_user_session_path, :class => "nav-link text-white", :method => :delete %>
+      <% else %>
+        <%= link_to "Signup", new_user_registration_path, :class => "nav-link text-white" %>
+        <%= link_to "Signin", new_user_session_path, :class => "nav-link text-white" %>
+      <% end %>
+    </nav>
+  </div>
+</header>
+<%= render 'shared/alert' %>
