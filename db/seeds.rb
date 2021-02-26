@@ -6,7 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 10.times do |n|
-  User.create!(email: "user_#{rand(100..1000)}@placesharing.com", username: "user#{rand(100..1000)}", password: "password", password_confirmation: "password")
+  User.create!(email: "user_#{n}@placesharing.com", username: "user_#{n}", password: "qwertyuio", password_confirmation: "qwertyuio")
 end
   
   puts "User created: #{User.count}"
