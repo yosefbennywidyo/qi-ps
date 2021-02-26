@@ -9,9 +9,16 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
         environment:
           RAILS_ENV: test
-          PGHOST: 127.0.0.1
-          PGUSER: root
+          DB_HOST: 127.0.0.1
+          PG_HOST: 127.0.0.1
+          PGUSER: placesharing
           RAILS_MASTER_KEY: $RAILS_MASTER_KEY
+
+      - image: circleci/postgres:12.0
+        environment:
+          POSTGRES_DB: placesharing_db
+          POSTGRES_USER: placesharing
+
     working_directory: ~/qi-ps
 
     steps:
@@ -68,8 +75,7 @@ jobs:
       - run:
           name: Setup DB
           command: |
-            bundle exec rake db:create db:schema:load --trace
-            bundle exec rake db:migrate
+            bundle exec rails db:create db:schema:load --trace
 
       # run tests!
       - run:
