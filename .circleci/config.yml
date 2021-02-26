@@ -9,8 +9,8 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
         environment:
           RAILS_ENV: test
-          DB_HOST: 127.0.0.1
-          PG_HOST: 127.0.0.1
+          DB_HOST: localhost
+          PG_HOST: localhost
           PGUSER: placesharing
           RAILS_MASTER_KEY: $RAILS_MASTER_KEY
 
