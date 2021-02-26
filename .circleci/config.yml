@@ -75,8 +75,8 @@ jobs:
       - run:
           name: Setup DB
           command: |
-            pg_ctl status
-            pg_ctl start
+            sudo systemctl status postgresql
+            sudo systemctl start postgresql
             bundle exec rails db:create db:schema:load --trace
 
       # run tests!
