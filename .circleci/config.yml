@@ -9,8 +9,8 @@ jobs:
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
         environment:
           RAILS_ENV: test
-          DB_HOST: localhost
-          PG_HOST: localhost
+          DB_HOST: 0.0.0.0
+          PG_HOST: 0.0.0.0
           PGUSER: placesharing
           RAILS_MASTER_KEY: $RAILS_MASTER_KEY
 
@@ -70,7 +70,7 @@ jobs:
             - ./vendor/bundle
           key: v1-dependencies-{{ checksum "Gemfile.lock" }}
       # Wait for DB
-      - run: dockerize -wait tcp://localhost:5432 -timeout 1m
+      - run: dockerize -wait tcp://0.0.0.0:5432 -timeout 1m
       - run: yarn install
       - run:
           name: Setup DB
