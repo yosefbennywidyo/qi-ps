@@ -1,0 +1,10 @@
+<main role="main" class="inner cover">
+  <h1 class="cover-heading">Public Places shared by Users</h1>
+  <%= render 'shared/places/check_user_can_create' %>
+  <%= render 'shared/places/public_places' %>
+<% if current_user %>
+  <h1 class="cover-heading">Shared Places Between Users</h1>
+  <h3 class="cover-heading">Place shared between PlaceSharing users</h3>
+  <%= render 'shared/places/shared_places' %>
+<% end %>
+</main>
