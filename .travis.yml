@@ -3,18 +3,25 @@ addons:
 
 language: ruby
 
-node_js:
-  - 15.5.1
+before_install:
+  - nvm install 15.5.1
+
+rvm:
+  - 2.7.2
+
+cache:
+  bundler: true
+  directories:
+    - vendor/bundle
+    - node_modules
 
 before_script:
   - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.10
   - export PATH="$HOME/.yarn/bin:$PATH"
 
 script:
+  - bundle install --jobs=3 --retry=3
   - yarn install
-  - bundle exec rails db:create RAILS_ENV=test
-  - bundle exec rails db:migrate RAILS_ENV=test
+  - bundle exec rails db:create
+  - bundle exec rails db:migrate
   - bundle exec rake
-
-rvm:
-  - 2.7.2
