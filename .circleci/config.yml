@@ -8,16 +8,13 @@ jobs:
           username: mydockerhub-user
           password: $DOCKERHUB_PASSWORD  # context / project UI env-var reference
         environment:
+          BUNDLE_RETRY: 3
+          BUNDLE_PATH: vendor/bundle
+          DATABASE_URL: postgres://postgres:password@localhost:5432/tech_cast_test
           RAILS_ENV: test
-          DB_HOST: 0.0.0.0
-          PG_HOST: 0.0.0.0
-          PGUSER: placesharing
           RAILS_MASTER_KEY: $RAILS_MASTER_KEY
 
       - image: circleci/postgres:12.0
-        environment:
-          POSTGRES_DB: placesharing_db
-          POSTGRES_USER: placesharing
 
     working_directory: ~/qi-ps
 
@@ -27,6 +24,10 @@ jobs:
           name: "echo an env var that is part of QI-PS test context"
           command: |
             echo $RAILS_MASTER_KEY
+      - restore_cache:
+          keys:
+            - qi-ps-bundle-v1-{{ checksum "Gemfile.lock" }}
+            - qi-ps-bundle-v1-
       - run:
           name: install dependencies
           command: |
@@ -63,15 +64,15 @@ jobs:
             bundle -v
             sudo gem install bundler:2.1.4 --default
             bundle -v
-            bundle install --jobs=4 --retry=3 --path vendor/bundle
+            bundle check || bundle install
 
       - save_cache:
+          key: qi-ps-bundle-v1-{{ checksum "Gemfile.lock" }}
           paths:
-            - ./vendor/bundle
-          key: v1-dependencies-{{ checksum "Gemfile.lock" }}
-      # Wait for DB
-      - run: dockerize -wait tcp://0.0.0.0:5432 -timeout 2m
+            - vendor/bundle
       - run: yarn install
+      # Wait for DB
+      - run: dockerize -wait tcp://0.0.0.0:5432 -timeout 1m
       - run:
           name: Setup DB
           command: |
@@ -79,17 +80,13 @@ jobs:
 
       # run tests!
       - run:
-          name: run tests
+          name: Run rspec in parallel
           command: |
-            mkdir /tmp/test-results
-            TEST_FILES="$(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)"
-
-            # bundle exec rspec --format progress \
-            #     --out /tmp/test-results/rspec.xml \
-            #     --format progress
-
-            # https://github.com/rspec/rspec-core/issues/2451
-            bundle exec rspec
+            bundle exec rspec --profile 10 \
+                             --format RspecJunitFormatter \
+                             --out /tmp/test-results/rspec.xml \
+                             --format progress \
+                             $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
 
       # collect reports
       - store_test_results:
