@@ -1,4 +1,4 @@
-[![CircleCI](https://circleci.com/gh/yosefbennywidyo/qi-ps.svg?style=svg)](https://circleci.com/gh/yosefbennywidyo/qi-ps)
+[![CircleCI](https://circleci.com/gh/yosefbennywidyo/qi-ps.svg?style=svg)](https://circleci.com/gh/yosefbennywidyo/qi-ps) [![Build Status](https://travis-ci.org/yosefbennywidyo/qi-ps.svg?branch=master)](https://travis-ci.org/yosefbennywidyo/qi-ps) [![codecov](https://codecov.io/gh/yosefbennywidyo/qi-ps/branch/master/graph/badge.svg?token=MG8UHHAOS0)](https://codecov.io/gh/yosefbennywidyo/qi-ps)
 
 # PlaceSharing Site
 [Check live application here](https://qi-ps.herokuapp.com/)
