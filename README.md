@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/yosefbennywidyo/qi-ps.svg?style=svg)](https://circleci.com/gh/yosefbennywidyo/qi-ps)
+
 # PlaceSharing Site
 [Check live application here](https://qi-ps.herokuapp.com/)
 
