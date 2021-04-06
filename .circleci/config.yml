@@ -24,6 +24,7 @@ jobs:
           name: "echo an env var that is part of QI-PS test context"
           command: |
             echo $RAILS_MASTER_KEY
+      - run: cp config/deploy/ci/database.yml config/database.yml
       - restore_cache:
           keys:
             - qi-ps-bundle-v1-{{ checksum "Gemfile.lock" }}
@@ -76,13 +77,13 @@ jobs:
       - run:
           name: Setup DB
           command: |
-            bundle exec rails db:create db:schema:load --trace
+            RAILS_ENV=test bundle exec rails db:create --trace
 
       # run tests!
       - run:
           name: Run rspec in parallel
           command: |
-            bundle exec rspec --out /tmp/test-results/rspec.xml \
+            RAILS_ENV=test bundle exec rspec --out /tmp/test-results/rspec.xml \
                               --format progress \
                               $(circleci tests glob "spec/**/*_spec.rb" | circleci tests split --split-by=timings)
 

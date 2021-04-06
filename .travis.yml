@@ -1,27 +1,27 @@
 addons:
   postgresql: 9.6
-
 language: ruby
-
 before_install:
-  - nvm install 15.5.1
-
+- nvm install 15.5.1
 rvm:
-  - 2.7.2
-
+- 2.7.2
 cache:
   bundler: true
   directories:
-    - vendor/bundle
-    - node_modules
-
+  - vendor/bundle
+  - node_modules
 before_script:
-  - curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.10
-  - export PATH="$HOME/.yarn/bin:$PATH"
-
+- curl -o- -L https://yarnpkg.com/install.sh | bash -s -- --version 1.22.10
+- export PATH="$HOME/.yarn/bin:$PATH"
 script:
-  - bundle install --jobs=3 --retry=3
-  - yarn install
-  - bundle exec rails db:create
-  - bundle exec rails db:migrate
-  - bundle exec rake
+- bundle config set deployment 'true'
+- bundle install --jobs=3 --retry=3
+- yarn install
+- bundle exec rails db:create
+- bundle exec rails db:migrate
+- bundle exec rake
+
+deploy:
+  provider: heroku
+  api_key:
+    secure: LqXeBYTNC8j7hlDpYhQ60tgOhehUNH5BIYr8zcxtzso8Y4UqH3eMKRgdssmDo+W6x8v7TYXT1SrG41+ybzX0qGTfh3+d8y6TqobA2w9lJZDHK/zb0XLYZtxqEd0UrWubyqC2sZM1nV2s+WS+Gn8xduE8REpYPhd+wXtiES9sTEFyg/smFqwr6ciid6is9ibxdQWJaTOrOpi6kzmJK6636QbWXsTqbItj6hf6ilXSr6TckwuXATokfoiG2sTQLbxEv9Jo4Rc/wsX5gswrVmdzTjCd1bxj5BvaFijGf8C5W5KdQDDFlVxSus1WxfK9xDfXyG2r/Rw9GLQzOMHVa6utPusSovpHXBIEHGG37EHNo9ROKTTcM4FR/E5+t+X/Zybg9NodjEQUUVfa2O6Jq2HGvyJOUilZIIVPT0Lul3xRuuH/Kwbq4tsYthBtYskWE+IpLLOkVQKiLYhjMzJbe+kEgZ+hHIxTIDjYOw35VYzMpv79rVelYbPGdPXq3Fg+TyTz11o/m9gQzrIkL5F8koDc6TurIz0dpd/oQzkAdOtqg1dqnMnOfs8n/gfWvZ1+hg9pOo4AoVJm5RdGDQhlCAHDWXzUVs2AWw1VxXnQBYDopzb3nrJXJKoTfammUVs6DvKDew139HkzslSov1x1IDTb6Mb0DyjZQQSLSbr5L5aDpmU=

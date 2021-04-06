@@ -4,7 +4,7 @@
       <div class="card">
         <div class="card-body">
           <h5 class="card-title text-info">No one share Place with you</h5>
-            <p class="card-text text-muted">Don't worry, start sharing your Place to other users</p>          
+            <p class="card-text text-muted">Don't worry, start sharing your Place to other users</p>
             <%= link_to 'Create place to share with other user', new_place_path, :class => "btn btn-outline-info btn-block" %>
         </div>
       </div>
@@ -17,9 +17,9 @@
         <div class="card">
           <div class="card-body">
             <h5 class="card-title text-info"><%= place.name %></h5>
-            <p class="card-text text-muted">Shared by: <%= place.users.pluck("username").first %></p>          
+            <p class="card-text text-muted">Shared by: <%= place.users.pluck("username").first %></p>
           <% if current_user %>
-            <% if current_user.id === place.place_permissions.pluck("user_id").first%>
+            <% if current_user.id === place.place_permissions.first.user_id %>
               <%= link_to 'Edit', edit_place_path(place), :class => "btn btn-outline-warning" %>
               <%= link_to 'Destroy', place, method: :delete, data: { confirm: 'Are you sure?' }, :class => "btn btn-outline-danger" %>
             <% else %>

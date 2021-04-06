@@ -5,18 +5,19 @@ class PlacesController < ApplicationController
   # GET /places
   # GET /places.json
   def index
-    @public_places = Place.where(public_status: true)
+    @public_places = Place.where(public_status: true).order(created_at: :desc)
     @public_places_sharer_ids = PlacePermission.where(place_id: @public_places.ids).pluck("user_id").uniq
     @public_places_sharer_users = User.where(id: @public_places_sharer_ids)
 
     if current_user
-      if PlacePermission.where(share_with: current_user.id).empty?
+      if PlacePermission.where("'?' = ANY(share_with)", current_user.id).size == 0
         @place_permissions_share_with_current_user = nil
       else
         @place_permissions_share_with_current_user = PlacePermission.select {|x| x.share_with.rindex(current_user.id)}.pluck("place_id")
         @places_share_with_current_user = Place.where(id: @place_permissions_share_with_current_user)
       end
     end
+
     # TODO: Create views for shared place by other user with current_user
   end
 
@@ -36,6 +37,8 @@ class PlacesController < ApplicationController
 
   # GET /places/1/edit
   def edit
+    @place_permissions = @place.place_permissions.first
+    @user_shared_with = User.where(id: @place_permissions.share_with).pluck(:id)
   end
 
   # POST /places
@@ -47,7 +50,7 @@ class PlacesController < ApplicationController
     share_with_array = params[:place][:users]
     share_with_array.delete_at(0)
 
-    @place =  current_user.places.create!(name: params[:place][:name], lat: params[:place][:lat], 
+    @place =  current_user.places.create!(name: params[:place][:name], lat: params[:place][:lat],
               lon: params[:place][:lon], public_status: params[:place][:public_status])
 
     respond_to do |format|
@@ -65,9 +68,13 @@ class PlacesController < ApplicationController
   # PATCH/PUT /places/1
   # PATCH/PUT /places/1.json
   def update
-
+    share_with_array = params[:place][:place_permissions]
+    share_with_array.delete_at(0)
+    puts "share_with_array: #{share_with_array}"
     respond_to do |format|
-      if @place.update(place_params)
+      if @place.update(name: params[:place][:name], lat: params[:place][:lat],
+        lon: params[:place][:lon], public_status: params[:place][:public_status])
+        @place.place_permissions.last.update(share_with: share_with_array)
         format.html { redirect_to @place, notice: 'Place was successfully updated.' }
         format.json { render :show, status: :ok, location: @place }
       else
@@ -99,7 +106,8 @@ class PlacesController < ApplicationController
 
     # Only allow a list of trusted parameters through.
     def place_params
-      params.fetch(:place, {}).permit(:name, :lat, :lon, :public_status, :user_id,
+      params.fetch(:place, {}).permit(:name, :lat, :lon, :public_status,
+        :user_id, :place_permissions,
       users: {},
       place_permission: {}
       )

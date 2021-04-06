@@ -58,6 +58,8 @@ RSpec.describe "home/index.html.erb", type: :view do
       fill_in 'Password', with: user.first.password
       click_button "Log in"
 
+      expect(page).to have_content "Signed in successfully."
+
       click_link "Places"
 
       expect(page).to have_content "Public Places shared by Users"
@@ -80,6 +82,10 @@ RSpec.describe "home/index.html.erb", type: :view do
       fill_in 'Email', with: logged_in_user.email
       fill_in 'Password', with: logged_in_user.password
       click_button "Log in"
+
+      expect(page).to have_content "Signed in successfully."
+
+      click_link "Places"
 
       click_link "Add new Place"
 
