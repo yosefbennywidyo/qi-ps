@@ -10,15 +10,7 @@ class Users::SessionsController < Devise::SessionsController
 
   # POST /resource/sign_in
   def create
-    @user = User.find_by(email:params["user"]["email"])
-    
-    if @user.valid_password?(params["user"]["password"])
-      sign_in(:user, @user)
-      redirect_to places_path
-    else
-      flash[:error] = "Invalid Password or Email"
-      redirect_back(fallback_location: root_path)
-    end
+    super
   end
 
   # DELETE /resource/sign_out
