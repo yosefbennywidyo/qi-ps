@@ -15,7 +15,7 @@
     <%= form.label :name, "Name" %>
     <%= form.text_field :name, class: "form-control" %>
   </div>
-  
+
   <div class="form-group">
     <%= form.label :lat, "Latitude" %>
     <%= form.text_field :lat, class: "form-control" %>
@@ -29,6 +29,13 @@
   <div class="field">
     <%= form.label :public_status %>
     <%= form.check_box :public_status %>
+  </div>
+
+  <div class="field">
+    <%= form.label :place_permissions %>
+    <%= form.collection_check_boxes :place_permissions, User.all, :id, :username, (@user_shared_with.empty? ? options = {} : options = { checked: @user_shared_with }) do |b| %>
+      <%= b.check_box + b.text %>
+    <% end %>
   </div>
 
   <div class="actions">
