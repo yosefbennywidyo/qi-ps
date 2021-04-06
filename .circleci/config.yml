@@ -24,6 +24,7 @@ jobs:
           name: "echo an env var that is part of QI-PS test context"
           command: |
             echo $RAILS_MASTER_KEY
+      - run: cp config/deploy/ci/database.yml config/database.yml
       - restore_cache:
           keys:
             - qi-ps-bundle-v1-{{ checksum "Gemfile.lock" }}
