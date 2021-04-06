@@ -61,6 +61,7 @@ end
 group :test do
   gem 'simplecov', require: false
   gem 'codecov', require: false
+  gem "test-prof", "~> 1.0"
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem
