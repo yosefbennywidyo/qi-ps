@@ -31,10 +31,6 @@ jobs:
           command: |
             echo $RAILS_MASTER_KEY
       - run: cp config/deploy/ci/database.yml config/database.yml
-      - restore_cache:
-          keys:
-            - qi-ps-bundle-v1-{{ checksum "Gemfile.lock" }}
-            - qi-ps-bundle-v1-
 
       - run:
           name: install ffmpeg
@@ -45,11 +41,6 @@ jobs:
           command: |
             gem install bundler:2.1.4 --default
             bundle install
-
-      - save_cache:
-          key: qi-ps-bundle-v1-{{ checksum "Gemfile.lock" }}
-          paths:
-            - vendor/bundle
       - run: yarn install
       # Wait for DB
       - run: dockerize -wait tcp://0.0.0.0:5432 -timeout 1m
