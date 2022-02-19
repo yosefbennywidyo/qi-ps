@@ -43,7 +43,6 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            bundle -v
             sudo gem install bundler:2.1.4 --default
             bundle -v
             bundle check || bundle install
