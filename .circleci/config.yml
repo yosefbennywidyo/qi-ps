@@ -1,4 +1,9 @@
-version: 2
+version: 2.1
+
+orbs:
+  ruby: circleci/ruby@1.0
+  node: circleci/node@2
+
 jobs:
   build:
     docker:
@@ -20,6 +25,7 @@ jobs:
 
     steps:
       - checkout
+      - ruby/install-deps
       - run:
           name: "echo an env var that is part of QI-PS test context"
           command: |
@@ -29,31 +35,6 @@ jobs:
           keys:
             - qi-ps-bundle-v1-{{ checksum "Gemfile.lock" }}
             - qi-ps-bundle-v1-
-      - run:
-          name: install dependencies
-          command: |
-            sudo apt-get update -qq && sudo apt-get -y install \
-              autoconf \
-              automake \
-              build-essential \
-              cmake \
-              git-core \
-              libass-dev \
-              libfreetype6-dev \
-              libgnutls28-dev \
-              libsdl2-dev \
-              libtool \
-              libva-dev \
-              libvdpau-dev \
-              libvorbis-dev \
-              libxcb1-dev \
-              libxcb-shm0-dev \
-              libxcb-xfixes0-dev \
-              pkg-config \
-              texinfo \
-              wget \
-              yasm \
-              zlib1g-dev
 
       - run:
           name: install ffmpeg
@@ -62,10 +43,8 @@ jobs:
       - run:
           name: install dependencies
           command: |
-            bundle -v
-            sudo gem install bundler:2.1.4 --default
-            bundle -v
-            bundle check || bundle install
+            gem install bundler:2.1.4 --default
+            bundle install
 
       - save_cache:
           key: qi-ps-bundle-v1-{{ checksum "Gemfile.lock" }}
